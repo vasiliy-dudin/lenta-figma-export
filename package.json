@@ -1,0 +1,31 @@
+{
+  "name": "figma-export",
+  "version": "2.0.4",
+  "description": "A CLI tool to bulk export Figma and FigJam files",
+  "scripts": {
+    "postinstall": "playwright install chromium",
+    "get-team-files": "node ./scripts/get-team-files.js",
+    "get-project-files": "node ./scripts/get-project-files.js",
+    "start": "playwright test",
+    "retry": "playwright test --last-failed",
+    "dry-run": "playwright test --list",
+    "report": "playwright show-report"
+  },
+  "author": "Alex Chan",
+  "license": "MIT",
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^25.6.0",
+    "eslint": "^10.2.1",
+    "globals": "^17.5.0",
+    "typescript-eslint": "^8.59.0"
+  },
+  "dependencies": {
+    "@playwright/test": "^1.59.1",
+    "dotenv": "^17.4.2"
+  },
+  "engines": {
+    "node": ">=20.18.1",
+    "npm": ">=10.8.2"
+  }
+}
