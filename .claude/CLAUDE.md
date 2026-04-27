@@ -61,8 +61,25 @@ Defined in `.env` (copy from `.env.example`):
 | `FIGMA_ACCESS_TOKEN` | API token for discovery scripts only |
 | `DOWNLOAD_PATH` | Absolute path where `.fig` files are saved |
 | `WAIT_TIMEOUT` | Delay in ms between downloads (default: 10000) |
+| `BATCH_INDEX` | Zero-based batch number to download. Omit to download all files. |
+| `BATCH_SIZE` | Files per batch (default used with `BATCH_INDEX`). |
 
 `FIGMA_AUTH_COOKIE` is preferred on the server because it avoids the two-step email login flow.
+
+## Batched Weekly Backup (cron)
+
+Figma triggers CAPTCHA after too many downloads in one session. To avoid this, ~50 files are split into 3 batches of ~17, run on Monday/Tuesday/Wednesday with 25-hour gaps:
+
+```
+# /etc/cron.d/figma-backup  (or user crontab)
+0 2 * * 1  cd /path/to/project && BATCH_INDEX=0 BATCH_SIZE=17 pnpm start
+0 3 * * 2  cd /path/to/project && BATCH_INDEX=1 BATCH_SIZE=17 pnpm start
+0 4 * * 3  cd /path/to/project && BATCH_INDEX=2 BATCH_SIZE=17 pnpm start
+```
+
+- Batch 0 starts Monday at 02:00, batch 1 Tuesday at 03:00 (+25 h), batch 2 Wednesday at 04:00 (+25 h).
+- The full backup cycle completes by Wednesday; a new cycle starts the following Monday.
+- `BATCH_INDEX` and `BATCH_SIZE` are passed as inline env vars — no changes to `.env` needed on the server.
 
 ## Company Team IDs
 
