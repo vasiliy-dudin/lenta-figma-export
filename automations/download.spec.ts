@@ -42,16 +42,6 @@ for (const project of projects) {
       test(`file: ${file.name} (${file.key})`, async ({ page }) => {
         await page.goto(`https://www.figma.com/design/${file.key}/`);
 
-        const backdrop = page.locator("._1kdzox96[data-backdrop='true']");
-        if (await backdrop.isVisible({ timeout: 30000 }).catch(() => false)) {
-          await page.evaluate(() => {
-            document
-              .querySelectorAll<HTMLElement>("._1kdzox96[data-backdrop='true'], .vvqzc70._1kdzox90")
-              .forEach((el) => (el.style.display = "none"));
-          });
-          await backdrop.waitFor({ state: "hidden" });
-        }
-
         const downloadPromise = page.waitForEvent("download");
 
         await page.locator("#toggle-menu-button").click();
