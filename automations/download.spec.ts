@@ -19,8 +19,21 @@ const isForce = process.env.FORCE === "true";
 const projectsToDownload = [];
 let scheduledCount = 0;
 
-for (const project of allProjects) {
-  const pendingFiles = project.files.filter((file: any) => isForce || !file.downloaded);
+interface FigmaFile {
+  key: string;
+  name: string;
+  downloaded?: boolean;
+}
+
+interface FigmaFolder {
+  id: string;
+  name?: string;
+  team_id?: string;
+  files: FigmaFile[];
+}
+
+for (const project of allProjects as FigmaFolder[]) {
+  const pendingFiles = project.files.filter((file: FigmaFile) => isForce || !file.downloaded);
   if (pendingFiles.length === 0 || scheduledCount >= limit) {
     continue;
   }
@@ -60,13 +73,15 @@ for (const project of projectsToDownload) {
         );
 
         // Update the original object reference
-        const originalProject = allProjects.find(
-          (p: any) => p.id === project.id,
+        const originalProject = (allProjects as FigmaFolder[]).find(
+          (p: FigmaFolder) => p.id === project.id,
         );
-        const originalFile = originalProject.files.find(
-          (f: any) => f.key === file.key,
+        const originalFile = originalProject?.files.find(
+          (f: FigmaFile) => f.key === file.key,
         );
-        originalFile.downloaded = true;
+        if (originalFile) {
+          originalFile.downloaded = true;
+        }
 
         fs.writeFileSync("files.json", JSON.stringify(allProjects, null, 2));
 

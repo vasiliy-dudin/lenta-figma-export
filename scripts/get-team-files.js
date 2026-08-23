@@ -1,6 +1,6 @@
 /* eslint-disable */
 const fs = require("node:fs");
-const { getFiles, getProjects, parseArgs, filterFiles } = require("./lib");
+const { getFolders, parseArgs, collectFolderFiles } = require("./lib");
 
 const { ids: teamIds, filters } = parseArgs(process.argv.slice(2));
 
@@ -10,24 +10,18 @@ const { ids: teamIds, filters } = parseArgs(process.argv.slice(2));
 
   for (const teamId of teamIds) {
     try {
-      const { projects } = await getProjects(teamId);
+      const folderData = await getFolders(teamId);
+      const folders = folderData.folders || folderData.projects || [];
 
-      for (const project of projects) {
-        const projectId = project.id;
-        const projectFiles = getFiles(project.id).then((data) =>
-          filterFiles(data, filters),
+      for (const folder of folders) {
+        const folderResults = await collectFolderFiles(
+          folder.id,
+          teamId,
+          filters,
+          promises,
+          folder.name,
         );
-
-        promises.push(projectFiles);
-
-        const projectFilesData = await projectFiles;
-
-        projectFilesData.id = projectId;
-        projectFilesData.team_id = teamId;
-
-        console.log(projectFilesData);
-
-        allFiles.push(projectFilesData);
+        allFiles.push(...folderResults);
       }
     } catch (error) {
       throw error;
@@ -35,6 +29,7 @@ const { ids: teamIds, filters } = parseArgs(process.argv.slice(2));
   }
 
   Promise.all(promises).then(() => {
-    fs.writeFileSync(__dirname + "/../files.json", JSON.stringify(allFiles));
+    fs.writeFileSync(__dirname + "/../files.json", JSON.stringify(allFiles, null, 2));
   });
 })();
+

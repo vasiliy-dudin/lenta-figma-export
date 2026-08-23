@@ -5,6 +5,7 @@
   "scripts": {
     "postinstall": "playwright install chromium",
     "get-team-files": "node ./scripts/get-team-files.js",
+    "get-folder-files": "node ./scripts/get-folder-files.js",
     "get-project-files": "node ./scripts/get-project-files.js",
     "start": "playwright test automations/download.spec.ts --",
     "start:force": "playwright test automations/download.spec.ts -- -force",

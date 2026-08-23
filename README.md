@@ -22,7 +22,7 @@ This tool leverages [Figma's REST API](https://www.figma.com/developers/api) and
 
 Other versions may work, but have not been officially tested.
 
-You will also need a [Figma access token](https://www.figma.com/developers/api#authentication) with scope access to **file content** that you can generate through your Figma user profile settings.
+You will also need a [Figma access token](https://www.figma.com/developers/api#authentication) with scope access to **folders:read** so that you can generate through your Figma user profile settings.
 
 > [!NOTE]
 > You must disable opening links in the Figma desktop app in order for downloads to work. See the [Figma docs](https://help.figma.com/hc/articles/360039824334-Open-links-in-the-desktop-app#h_01HW8HDP9DN3HTMQ65XQMXR88A) on how to disable this setting.
@@ -66,18 +66,18 @@ The value for `FIGMA_AUTH_COOKIE` should be the value of the `__Host-figma.authn
 `files.json` determines which Figma files within your account will be downloaded.
 
 > [!TIP]
-> Drafts are just a hidden project in Figma so you can absolutely download them with figma-export. Check out the [wiki](https://github.com/alexchantastic/figma-export/wiki/Downloading-draft-files) to learn about how to grab the drafts project ID.
+> Drafts are just a hidden folder in Figma so you can absolutely download them with figma-export. Check out the [wiki](https://github.com/alexchantastic/figma-export/wiki/Downloading-draft-files) to learn about how to grab the drafts folder ID.
 
 It is recommended that you use one of the built-in commands to generate `files.json`:
 
-- `npm run get-team-files {team_ids ...}` - Gets all files for all projects within given team IDs (space separated)
+- `npm run get-team-files {team_ids ...}` - Gets all files for all folders (including subfolders) within given team IDs (space separated)
   - Example: `npm run get-team-files 12345 67890`
-- `npm run get-project-files {project_ids ...}` - Gets all files for given project IDs (space separated)
-  - Example: `npm run get-project-files 12345 67890`
+- `npm run get-folder-files {folder_ids ...}` - Gets all files for given folder/project IDs (space separated), traversing subfolders
+  - Example: `npm run get-folder-files 12345 67890`
 
 To find your Figma team ID, navigate to your [Figma home](https://www.figma.com/files/), right click your team in the left sidebar, and then click **Copy link**. The last segment of the URL that you copied will contain your team ID: `https://www.figma.com/files/team/1234567890`.
 
-To find a project ID, navigate to your team's home, right click the project, and then click **Copy link**. The last segment of the URL that you copied will contain the project ID: `https://www.figma.com/files/project/1234567890`.
+To find a folder ID, navigate to your team's home, right click the folder, and then click **Copy link**. The last segment of the URL that you copied will contain the folder ID: `https://www.figma.com/files/project/1234567890` or `https://www.figma.com/files/folder/1234567890`.
 
 You are free to manually construct this file as long as it follows this structure:
 
@@ -100,7 +100,7 @@ You are free to manually construct this file as long as it follows this structur
 ]
 ```
 
-This is a modified structure from the return value of [Figma's GET project files](https://www.figma.com/developers/api#get-project-files-endpoint) endpoint.
+This is a modified structure from the return value of [Figma's GET folder files](https://developers.figma.com/docs/rest-api/folders-endpoints/#get-folder-files-endpoint) endpoint.
 
 #### Filtering files by date
 
@@ -119,34 +119,34 @@ Any date format supported by JavaScript's `Date.parse()` is accepted (such as `Y
   ```
 - Get files modified between `2026-05-01` and `2026-06-01`:
   ```sh
-  npm run get-project-files -- 12345 -last-modified-after 2026-05-01 -last-modified-before 2026-06-01
+  npm run get-folder-files -- 12345 -last-modified-after 2026-05-01 -last-modified-before 2026-06-01
   ```
 
 ### Starting the downloads
 
 Once you have generated `files.json`, you can then run `npm run start` to start the downloads. The status of each download will be shown in the console.
 
-Each file will be downloaded to your specified `DOWNLOAD_PATH` in a folder named with the project's name and ID. Each file will be saved as the file's name and ID (key). The folder structure will look something like this:
+Each file will be downloaded to your specified `DOWNLOAD_PATH` in a folder named with the folder's name and ID. Each file will be saved as the file's name and ID (key). The folder structure will look something like this:
 
 ```
-Project A (12345)/
+Folder A (12345)/
 ├── File X (123).fig
 └── File Y (456).fig
-Project B (67890)/
+Folder B (67890)/
 └── File Z (789).fig
 ```
 
-If you ran `get-team-files`, your `files.json` will also have references to the team ID(s) so projects will be placed in a folder named after the team ID. In which case, the folder structure will look something like this:
+If you ran `get-team-files`, your `files.json` will also have references to the team ID(s) so folders will be placed in a folder named after the team ID. In which case, the folder structure will look something like this:
 
 ```
 1029384756/
-├── Project A (12345)/
+├── Folder A (12345)/
 │   ├── File X (123).fig
 │   └── File Y (456).fig
-└── Project B (67890)/
+└── Folder B (67890)/
     └── File Z (789).fig
 5647382910/
-└── Project C (45678)/
+└── Folder C (45678)/
     └── File W (012).fig
 ```
 
@@ -201,12 +201,13 @@ The following commands are available via `npm run`:
 | Command             | Description                                                |
 | ------------------- | ---------------------------------------------------------- |
 | `get-team-files`    | Generates `files.json` from Figma team ID(s)               |
-| `get-project-files` | Generates `files.json` from Figma project ID(s)            |
+| `get-folder-files`  | Generates `files.json` from Figma folder ID(s)             |
+| `get-project-files` | Alias for `get-folder-files`                               |
 | `start`             | Starts downloads                                           |
 | `start:force`       | Starts downloads, forcing all files to be downloaded again |
 | `retry`             | Retries failed downloads from last run                     |
 | `dry-run`           | Lists files that will be downloaded                        |
-| `report`            | Show an HTML report of the last run                        |
+| `report`            | Shows an HTML report of the last run                       |
 
 At any time, you can press `ctrl+c` to stop a command.
 

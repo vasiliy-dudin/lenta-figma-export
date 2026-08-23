@@ -24,17 +24,17 @@ if (fs.existsSync("files.json")) {
       process.env.FORCE = "true";
     }
 
-    let scheduledCount = 0;
+    const scheduledCount = 0;
     for (const project of allProjects) {
       const pendingFiles = project.files.filter(
-        (file: any) => isForce || !file.downloaded,
+        (file: { downloaded?: boolean }) => isForce || !file.downloaded,
       );
       if (pendingFiles.length > 0 && scheduledCount < limit) {
         hasFilesToDownload = true;
         break;
       }
     }
-  } catch (error) {
+  } catch {
     // If files.json is malformed or has issues, let Playwright run to expose the error
     hasFilesToDownload = true;
   }
