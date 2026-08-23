@@ -72,7 +72,7 @@ It is recommended that you use one of the built-in commands to generate `files.j
 
 - `npm run get-team-files {team_ids ...}` - Gets all files for all folders (including subfolders) within given team IDs (space separated)
   - Example: `npm run get-team-files 12345 67890`
-- `npm run get-folder-files {folder_ids ...}` - Gets all files for given folder/project IDs (space separated), traversing subfolders
+- `npm run get-folder-files {folder_ids ...}` - Gets all files for given folder IDs (space separated), traversing subfolders
   - Example: `npm run get-folder-files 12345 67890`
 
 To find your Figma team ID, navigate to your [Figma home](https://www.figma.com/files/), right click your team in the left sidebar, and then click **Copy link**. The last segment of the URL that you copied will contain your team ID: `https://www.figma.com/files/team/1234567890`.
@@ -198,16 +198,15 @@ Note that downloads may fail due to any number of reasons, but typically it is d
 
 The following commands are available via `npm run`:
 
-| Command             | Description                                                |
-| ------------------- | ---------------------------------------------------------- |
-| `get-team-files`    | Generates `files.json` from Figma team ID(s)               |
-| `get-folder-files`  | Generates `files.json` from Figma folder ID(s)             |
-| `get-project-files` | Alias for `get-folder-files`                               |
-| `start`             | Starts downloads                                           |
-| `start:force`       | Starts downloads, forcing all files to be downloaded again |
-| `retry`             | Retries failed downloads from last run                     |
-| `dry-run`           | Lists files that will be downloaded                        |
-| `report`            | Shows an HTML report of the last run                       |
+| Command             | Description                                                    |
+| ------------------- | -------------------------------------------------------------- |
+| `get-team-files`    | Generates `files.json` from Figma team ID(s)                   |
+| `get-folder-files`  | Generates `files.json` from Figma folder ID(s)                 |
+| `start`             | Starts downloads                                               |
+| `start:force`       | Starts downloads, forcing all files to be downloaded again     |
+| `retry`             | Retries failed downloads from last run                         |
+| `dry-run`           | Lists files that will be downloaded                            |
+| `report`            | Shows an HTML report of the last run                           |
 
 At any time, you can press `ctrl+c` to stop a command.
 
