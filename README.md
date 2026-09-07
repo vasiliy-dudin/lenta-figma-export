@@ -22,7 +22,7 @@ This tool leverages [Figma's REST API](https://www.figma.com/developers/api) and
 
 Other versions may work, but have not been officially tested.
 
-You will also need a [Figma access token](https://www.figma.com/developers/api#authentication) with scope access to **folders:read** so that you can generate through your Figma user profile settings.
+You will also need a [Figma access token](https://www.figma.com/developers/api#authentication) with scope access to **folders:read**.
 
 > [!NOTE]
 > You must disable opening links in the Figma desktop app in order for downloads to work. See the [Figma docs](https://help.figma.com/hc/articles/360039824334-Open-links-in-the-desktop-app#h_01HW8HDP9DN3HTMQ65XQMXR88A) on how to disable this setting.
@@ -198,15 +198,15 @@ Note that downloads may fail due to any number of reasons, but typically it is d
 
 The following commands are available via `npm run`:
 
-| Command             | Description                                                    |
-| ------------------- | -------------------------------------------------------------- |
-| `get-team-files`    | Generates `files.json` from Figma team ID(s)                   |
-| `get-folder-files`  | Generates `files.json` from Figma folder ID(s)                 |
-| `start`             | Starts downloads                                               |
-| `start:force`       | Starts downloads, forcing all files to be downloaded again     |
-| `retry`             | Retries failed downloads from last run                         |
-| `dry-run`           | Lists files that will be downloaded                            |
-| `report`            | Shows an HTML report of the last run                           |
+| Command            | Description                                                |
+| ------------------ | ---------------------------------------------------------- |
+| `get-team-files`   | Generates `files.json` from Figma team ID(s)               |
+| `get-folder-files` | Generates `files.json` from Figma folder ID(s)             |
+| `start`            | Starts downloads                                           |
+| `start:force`      | Starts downloads, forcing all files to be downloaded again |
+| `retry`            | Retries failed downloads from last run                     |
+| `dry-run`          | Lists files that will be downloaded                        |
+| `report`           | Shows an HTML report of the last run                       |
 
 At any time, you can press `ctrl+c` to stop a command.
 
