@@ -18,7 +18,7 @@ This tool leverages [Figma's REST API](https://www.figma.com/developers/api) and
 ## Requirements
 
 - node (v24 LTS)
-- npm (v11 LTS)
+- pnpm (v10 or later)
 
 Other versions may work, but have not been officially tested.
 
@@ -31,7 +31,7 @@ You will also need a [Figma access token](https://www.figma.com/developers/api#a
 
 1. Clone the repository or download the latest release
 2. `cd` into the repository
-3. Run `npm install`
+3. Run `pnpm install`
 
 ## Usage
 
@@ -70,10 +70,10 @@ The value for `FIGMA_AUTH_COOKIE` should be the value of the `__Host-figma.authn
 
 It is recommended that you use one of the built-in commands to generate `files.json`:
 
-- `npm run get-team-files {team_ids ...}` - Gets all files for all folders (including subfolders) within given team IDs (space separated)
-  - Example: `npm run get-team-files 12345 67890`
-- `npm run get-folder-files {folder_ids ...}` - Gets all files for given folder IDs (space separated), traversing subfolders
-  - Example: `npm run get-folder-files 12345 67890`
+- `pnpm run get-team-files {team_ids ...}` - Gets all files for all folders (including subfolders) within given team IDs (space separated)
+  - Example: `pnpm run get-team-files 12345 67890`
+- `pnpm run get-folder-files {folder_ids ...}` - Gets all files for given folder IDs (space separated), traversing subfolders
+  - Example: `pnpm run get-folder-files 12345 67890`
 
 To find your Figma team ID, navigate to your [Figma home](https://www.figma.com/files/), right click your team in the left sidebar, and then click **Copy link**. The last segment of the URL that you copied will contain your team ID: `https://www.figma.com/files/team/1234567890`.
 
@@ -115,16 +115,16 @@ Any date format supported by JavaScript's `Date.parse()` is accepted (such as `Y
 
 - Only get files modified after `2026-06-01`:
   ```sh
-  npm run get-team-files -- 12345 67890 -last-modified-after 2026-06-01
+  pnpm run get-team-files -- 12345 67890 -last-modified-after 2026-06-01
   ```
 - Get files modified between `2026-05-01` and `2026-06-01`:
   ```sh
-  npm run get-folder-files -- 12345 -last-modified-after 2026-05-01 -last-modified-before 2026-06-01
+  pnpm run get-folder-files -- 12345 -last-modified-after 2026-05-01 -last-modified-before 2026-06-01
   ```
 
 ### Starting the downloads
 
-Once you have generated `files.json`, you can then run `npm run start` to start the downloads. The status of each download will be shown in the console.
+Once you have generated `files.json`, you can then run `pnpm start` to start the downloads. The status of each download will be shown in the console.
 
 Each file will be downloaded to your specified `DOWNLOAD_PATH` in a folder named with the folder's name and ID. Each file will be saved as the file's name and ID (key). The folder structure will look something like this:
 
@@ -154,12 +154,12 @@ If you ran `get-team-files`, your `files.json` will also have references to the 
 
 Each successful file download will be tracked in `files.json` by adding a `"downloaded": true` property to the corresponding file object.
 
-If a run is stopped or fails midway, running `npm run start` again will automatically resume downloading only the remaining pending files.
+If a run is stopped or fails midway, running `pnpm start` again will automatically resume downloading only the remaining pending files.
 
 To bypass tracking and force-download all files from scratch (including those already downloaded), run:
 
 ```sh
-npm run start:force
+pnpm run start:force
 ```
 
 ### Limiting downloads
@@ -167,7 +167,7 @@ npm run start:force
 You can limit the number of files downloaded in a single run using the `-limit` flag:
 
 ```sh
-npm run start -- -limit 10
+pnpm start -- -limit 10
 ```
 
 This will download only the first 10 pending (not yet downloaded) files and then stop. This is useful for testing your setup or working around Figma's anti-automation measures by downloading in smaller batches.
@@ -190,13 +190,13 @@ export default defineConfig({
 
 ### Retrying failed downloads
 
-If you encounter downloads that fail, you can attempt to re-run _only_ those failed downloads using the `npm run retry` command.
+If you encounter downloads that fail, you can attempt to re-run _only_ those failed downloads using the `pnpm run retry` command.
 
 Note that downloads may fail due to any number of reasons, but typically it is due to reaching the Playwright timeout. You can increase this timeout by updating the `timeout` configuration in `playwright.config.ts`.
 
 ## Commands
 
-The following commands are available via `npm run`:
+The following commands are available via `pnpm run`:
 
 | Command            | Description                                                |
 | ------------------ | ---------------------------------------------------------- |
