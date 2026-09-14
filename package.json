@@ -1,12 +1,13 @@
 {
   "name": "figma-export",
-  "version": "2.0.4",
+  "version": "3.0.0",
   "description": "A CLI tool to bulk export Figma and FigJam files",
   "scripts": {
     "postinstall": "playwright install chromium",
     "get-team-files": "node ./scripts/get-team-files.js",
-    "get-project-files": "node ./scripts/get-project-files.js",
-    "start": "playwright test",
+    "get-folder-files": "node ./scripts/get-folder-files.js",
+    "start": "playwright test automations/download.spec.ts --",
+    "start:force": "playwright test automations/download.spec.ts -- -force",
     "retry": "playwright test --last-failed",
     "dry-run": "playwright test --list",
     "report": "playwright show-report"
@@ -14,15 +15,15 @@
   "author": "Alex Chan",
   "license": "MIT",
   "devDependencies": {
-    "@eslint/js": "^10.0.1",
-    "@types/node": "^25.6.0",
-    "eslint": "^10.2.1",
-    "globals": "^17.5.0",
-    "typescript-eslint": "^8.59.0"
+    "@eslint/js": "^9.23.0",
+    "@types/node": "^20.12.12",
+    "eslint": "^9.23.0",
+    "globals": "^16.0.0",
+    "typescript-eslint": "^8.28.0"
   },
   "dependencies": {
-    "@playwright/test": "^1.59.1",
-    "dotenv": "^17.4.2"
+    "@playwright/test": "^1.60.0",
+    "dotenv": "^16.4.5"
   },
   "engines": {
     "node": ">=20.18.1",
